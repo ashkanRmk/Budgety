@@ -83,6 +83,11 @@ var uiController = (function () {
             html = html.replace('%description%', newItem.description);
             html = html.replace('%value%', newItem.value);
             document.querySelector(element).insertAdjacentHTML('beforeend',html);
+            //Clear fields
+            document.querySelector(uiStrings.valueString).value="";
+            document.querySelector(uiStrings.descstring).value="";
+            document.querySelector(uiStrings.descstring).focus();
+            
         }
     };
 
