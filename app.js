@@ -53,6 +53,9 @@ var uiController = (function () {
         descstring: '.add__description',
         valueString: '.add__value',
         btnString: '.add__btn',
+        incString: '.income__list',
+        expString: '.expenses__list'
+
     };
 
     return {
@@ -65,8 +68,22 @@ var uiController = (function () {
         },
         getUiStrings: function () {
             return uiStrings;
-        }
+        },
+        addItemToUi: function (newItem, type) {
+            var html, element;
 
+            if (type === 'exp') {
+                element = uiStrings.expString;
+                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            } else if (type === 'inc') {
+                element = uiStrings.incString;
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            }
+            html = html.replace('%id%', newItem.id);
+            html = html.replace('%description%', newItem.description);
+            html = html.replace('%value%', newItem.value);
+            document.querySelector(element).insertAdjacentHTML('beforeend',html);
+        }
     };
 
 
@@ -87,14 +104,14 @@ var controller = (function (budgetCntrl, uiCntrl) {
     };
 
     var addNewItem = function () {
-        var ui,budget;
+        var ui, budget;
         //1. Get input
-        ui=new uiCntrl.getInput();
+        ui = new uiCntrl.getInput();
         //2. Add item to budget controller
-        budget=new budgetCntrl.addItem(ui.type,ui.desc,ui.value);
-        
-        //3. Add item to UI
+        budget = new budgetCntrl.addItem(ui.type, ui.desc, ui.value);
 
+        //3. Add item to UI
+        item=new uiCntrl.addItemToUi(budget,ui.type);
         //4. Calculate budget
 
         //5. update Budget UI
