@@ -47,6 +47,19 @@ var budgetController = (function () {
             return newItem;
         },
 
+        deleteItem: function (type, id) {
+            var ids, index;
+            
+            ids = data.allItems[type].map(function (cur) {
+                return (cur.id) ;
+            });
+            
+             index=ids.indexOf(id);
+            
+            if (index !== -1)
+                data.allItems[type].splice(index, 1);
+            console.log(data.allItems[type]);
+        },
         calculateBudget: function () {
             calculateTotal('inc');
             calculateTotal('exp');
@@ -120,6 +133,10 @@ var uiController = (function () {
             document.querySelector(uiStrings.descstring).focus();
 
         },
+        removeItem:function(id){
+          var el=document.getElementById(id);
+            el.parentNode.removeChild(el);
+        },
         displayBudget: function (obj) {
             document.querySelector(uiStrings.budgetLabel).textContent = obj.displayBudget;
             document.querySelector(uiStrings.incomeLabel).textContent = obj.displayTotalInc;
@@ -146,7 +163,7 @@ var controller = (function (budgetCntrl, uiCntrl) {
             if (event.keyCode === 13 || event.which === 13)
                 addNewItem();
         });
-        document.querySelector(getUiStrings.container).addEventListener('click', deleteItem);
+        document.querySelector(getUiStrings.container).addEventListener('click', cntrldeleteItem);
     };
 
     var updateBudget = function () {
@@ -173,17 +190,18 @@ var controller = (function (budgetCntrl, uiCntrl) {
         }
 
     };
-    var deleteItem = function (event) {
-        var containerEvent, type, id;
+
+    var cntrldeleteItem = function (event) {
+        var containerEvent,containerEventSplit, type, id;
         containerEvent = event.target.parentNode.parentNode.parentNode.parentNode.id;
         if (containerEvent) {
-            containerEvent.split('-');
-            type = containerEvent[0];
-            id = containerEvent[1];
+            containerEventSplit=containerEvent.split('-');
+            type = containerEventSplit[0];
+            id = parseInt(containerEventSplit[1]);
+            budgetCntrl.deleteItem(type,id);
+            uiCntrl.removeItem(containerEvent);
+            updateBudget();
         }
-        console.log(containerEvent);
-
-
     };
 
 
