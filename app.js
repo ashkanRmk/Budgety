@@ -184,6 +184,14 @@ var uiController = (function () {
             return (type === 'inc' ? '+' : '-') + ' ' + int;
 
     };
+    
+    
+    var forEachNode = function (list, callBack) {
+        for (var i = 0; i < list.length; i++) {
+            callBack(list[i], i);
+        }
+    };
+
 
 
     return {
@@ -258,12 +266,6 @@ var uiController = (function () {
 
             var fields = document.querySelectorAll(uiStrings.percesLabel);
 
-            var forEachNode = function (list, callBack) {
-                for (var i = 0; i < list.length; i++) {
-                    callBack(list[i], i);
-                }
-            };
-
             forEachNode(fields, function (current, index) {
 
                 if (percentage[index] > 0) {
@@ -288,7 +290,19 @@ var uiController = (function () {
             if (month < 1)
                 year--;
 
-            document.querySelector(uiStrings.dateLabel).textContent =months[month]+'  '+year;
+            document.querySelector(uiStrings.dateLabel).textContent = months[month] + '  ' + year;
+        },
+
+
+        changeType: function () {
+
+            var fields = document.querySelectorAll(uiStrings.typeString + ',' + uiStrings.valueString + ',' + uiStrings.descstring);
+            
+            forEachNode(fields,function(cur){
+               cur.classList.toggle('red-focus');               
+            });
+            
+            document.querySelector(uiStrings.btnString).classList.toggle('red');
         }
     };
 })();
@@ -305,6 +319,7 @@ var controller = (function (budgetCntrl, uiCntrl) {
                 addNewItem();
         });
         document.querySelector(getUiStrings.container).addEventListener('click', cntrldeleteItem);
+        document.querySelector(getUiStrings.typeString).addEventListener('change',uiCntrl.changeType);
     };
 
     var updateBudget = function () {
