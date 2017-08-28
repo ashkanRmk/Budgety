@@ -159,7 +159,8 @@ var uiController = (function () {
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
-        percesLabel: '.item__percentage'
+        percesLabel: '.item__percentage',
+        dateLabel: '.budget__title--month'
 
     };
 
@@ -177,7 +178,10 @@ var uiController = (function () {
             int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3) + '.' + dec;
         }
 
-        return (type === 'inc' ? '+' : '-') + ' ' + int;
+        if (num === '0.00')
+            return ' ' + int;
+        else
+            return (type === 'inc' ? '+' : '-') + ' ' + int;
 
     };
 
@@ -213,7 +217,7 @@ var uiController = (function () {
 
             html = html.replace('%id%', newItem.id);
             html = html.replace('%description%', newItem.description);
-            html = html.replace('%value%', formatNumbers(newItem.value,type));
+            html = html.replace('%value%', formatNumbers(newItem.value, type));
             document.querySelector(element).insertAdjacentHTML('beforeend', html);
             //Clear fields
             document.querySelector(uiStrings.valueString).value = "";
@@ -269,6 +273,22 @@ var uiController = (function () {
                     current.textContent = '---';
 
             });
+        },
+
+
+        date: function () {
+
+            var now, year, month, monthes;
+
+            now = new Date();
+            year = now.getFullYear() - 621;
+            months = ["Bahman", "Esfand", "Farvardin", "Ordibehesht", "Khordad", "Tir", "Mordad", "Shahrivar", "Mehr", "Aban", "Azar", "Dey"];
+            month = now.getMonth();
+
+            if (month < 1)
+                year--;
+
+            document.querySelector(uiStrings.dateLabel).textContent =months[month]+'  '+year;
         }
     };
 })();
@@ -327,20 +347,23 @@ var controller = (function (budgetCntrl, uiCntrl) {
     };
 
     var updatePercentages = function () {
+
         budgetCntrl.calculatePerc();
         var percentages = budgetCntrl.getCalculatePerc();
         uiCntrl.displayPerc(percentages);
     };
 
     return {
+
         init: function () {
-            console.log('setup');
+
             uiCntrl.displayBudget({
                 displayPerc: -1,
                 displayBudget: 0,
                 displayTotalInc: 0,
                 displayTotalExp: 0
             });
+            uiCntrl.date();
             eventListener();
         }
     };
