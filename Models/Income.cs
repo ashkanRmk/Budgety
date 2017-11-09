@@ -5,6 +5,7 @@ namespace Budgety_master.Models
 {
     public class Income
     {
+        
         public int Id { get; set; }
 
         [Required]
