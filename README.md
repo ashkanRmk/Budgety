@@ -1,6 +1,6 @@
 # Budgety
 
-A web application where you can manage your incomes and expenses.
+A web application where you can manage your budget, by import your incomes and expenses to it.  
 
 ## Technology used
 
